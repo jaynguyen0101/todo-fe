@@ -64,7 +64,7 @@ export default function HomePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Refresh tasks
     },
-    onError: (error: any) => {
+    onError: (error) => {
       console.error("Error toggling task:", error);
       alert("Failed to update task. Please try again.");
     },
@@ -184,7 +184,7 @@ export default function HomePage() {
             <div className="text-gray-500 flex flex-col items-center">
               <span className="text-5xl">📝</span>
               <p className="mt-4 text-xl font-semibold">
-                You don't have any tasks registered yet.
+                You don&apos;t have any tasks registered yet.
               </p>
               <p className="mt-2 text-gray-400">
                 Create tasks and organize your to-do items.

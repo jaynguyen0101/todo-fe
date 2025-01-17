@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/config/api";
 import { PlusCircleIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
