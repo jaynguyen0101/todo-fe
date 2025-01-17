@@ -3,7 +3,7 @@
 import { API_URL } from "@/config/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Task } from "../../types";
 import TaskCard from "./components/TaskCard";
 

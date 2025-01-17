@@ -1,17 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/config/api";
-import { PlusCircleIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { TASK_COLORS } from "../../../constants";
 import TaskForm from "../components/TaskForm";
 
 export default function CreateTaskPage() {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [selectedColor, setSelectedColor] = useState(TASK_COLORS[0].value);
   const queryClient = useQueryClient();
 
   // React Query Mutation for adding a task
@@ -48,7 +43,7 @@ export default function CreateTaskPage() {
       alert("Title is required");
       return;
     }
-    addTaskMutation.mutate({ title: title.trim(), color: selectedColor });
+    addTaskMutation.mutate({ title: title.trim(), color: color });
   };
 
   return (

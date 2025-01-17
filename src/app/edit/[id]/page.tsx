@@ -1,29 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/config/api";
-import { ArrowLeftIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import TaskForm from "@/app/components/TaskForm";
-
-const COLORS = [
-  { color: "bg-red-500", value: "red" },
-  { color: "bg-yellow-500", value: "yellow" },
-  { color: "bg-green-500", value: "green" },
-  { color: "bg-blue-500", value: "blue" },
-  { color: "bg-purple-500", value: "purple" },
-  { color: "bg-pink-500", value: "pink" },
-  { color: "bg-gray-500", value: "gray" },
-];
 
 export default function EditTaskPage() {
   const router = useRouter();
   const { id } = useParams(); // Get the task ID from the URL
   const queryClient = useQueryClient();
-
-  const [title, setTitle] = useState("");
-  const [selectedColor, setSelectedColor] = useState(COLORS[0].value);
 
   // Fetch the existing task
   const {
@@ -41,14 +26,6 @@ export default function EditTaskPage() {
     },
     enabled: !!id,
   });
-
-  // Populate the form with the task data when available
-  useEffect(() => {
-    if (task) {
-      setTitle(task.title);
-      setSelectedColor(task.color);
-    }
-  }, [task]);
 
   // Mutation to update the task
   const updateTaskMutation = useMutation({
@@ -82,21 +59,6 @@ export default function EditTaskPage() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!title.trim()) {
-      alert("Title is required");
-      return;
-    }
-
-    if (typeof id === "string") {
-      updateTaskMutation.mutate({ id, title, color: selectedColor });
-    } else {
-      alert("Invalid task ID");
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
@@ -114,11 +76,16 @@ export default function EditTaskPage() {
   }
 
   const handleUpdateTask = (title: string, color: string) => {
+    if (!title.trim()) {
+      alert("Title is required");
+      return;
+    }
+
     if (typeof id === "string") {
       updateTaskMutation.mutate({
         id,
         title: title.trim(),
-        color: selectedColor,
+        color: color,
       });
     } else {
       alert("Invalid task ID");

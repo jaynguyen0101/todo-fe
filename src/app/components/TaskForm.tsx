@@ -37,6 +37,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
     onSubmit(title.trim(), selectedColor);
   };
 
+  console.log("color", selectedColor);
   return (
     <form
       onSubmit={handleSubmit}
