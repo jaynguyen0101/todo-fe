@@ -5,23 +5,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/config/api";
 import { PlusCircleIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-
-const COLORS = [
-  { color: "bg-red-500", value: "red" },
-  { color: "bg-orange-500", value: "orange" },
-  { color: "bg-yellow-500", value: "yellow" },
-  { color: "bg-green-500", value: "green" },
-  { color: "bg-blue-500", value: "blue" },
-  { color: "bg-purple-500", value: "purple" },
-  { color: "bg-pink-500", value: "pink" },
-  { color: "bg-rose-500", value: "pink-red" },
-  { color: "bg-amber-500", value: "beige" },
-];
+import { TASK_COLORS } from "../../../constants";
+import TaskForm from "../components/TaskForm";
 
 export default function CreateTaskPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [selectedColor, setSelectedColor] = useState(COLORS[0].value);
+  const [selectedColor, setSelectedColor] = useState(TASK_COLORS[0].value);
   const queryClient = useQueryClient();
 
   // React Query Mutation for adding a task
@@ -53,14 +43,11 @@ export default function CreateTaskPage() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleAddTask = (title: string, color: string) => {
     if (!title.trim()) {
       alert("Title is required");
       return;
     }
-
     addTaskMutation.mutate({ title: title.trim(), color: selectedColor });
   };
 
@@ -80,69 +67,7 @@ export default function CreateTaskPage() {
       </header>
 
       {/* Form */}
-      <form
-        onSubmit={handleSubmit}
-        className="mt-8 w-full max-w-3xl bg-gray-800 p-6 rounded-lg shadow-md space-y-6"
-      >
-        {/* Back Button */}
-        <button
-          type="button"
-          onClick={() => router.push("/")} // Navigate back without saving
-          className="text-white hover:text-gray-200"
-        >
-          <ArrowLeftIcon className="h-6 w-6" />
-        </button>
-
-        {/* Title Field */}
-        <div>
-          <label htmlFor="title" className="block text-blue-400 font-medium">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Ex. Brush your teeth"
-            className="mt-2 w-full p-3 bg-gray-700 text-white rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        {/* Color Selector */}
-        <div>
-          <label className="block text-blue-400 font-medium mb-2">Color</label>
-          <div className="flex items-center gap-4">
-            {COLORS.map(({ color, value }) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => setSelectedColor(value)}
-                className={`h-10 w-10 rounded-full border-2 hover:scale-110 ${
-                  selectedColor === value
-                    ? "border-primary"
-                    : "border-transparent"
-                } ${color} focus:outline-none`}
-              ></button>
-            ))}
-          </div>
-        </div>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={addTaskMutation.isPending === true}
-          className={`w-full px-6 py-3 rounded-lg shadow-md flex items-center justify-center gap-2 ${
-            addTaskMutation.isPending === true
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
-          }`}
-        >
-          {addTaskMutation.isPending === true ? "Adding..." : "Add Task"}
-          {!addTaskMutation.isPending === true && (
-            <PlusCircleIcon className="h-6 w-6" />
-          )}
-        </button>
-      </form>
+      <TaskForm onSubmit={handleAddTask} />
     </div>
   );
 }

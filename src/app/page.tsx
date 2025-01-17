@@ -4,13 +4,8 @@ import { API_URL } from "@/config/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
-
-interface Task {
-  id: number;
-  title: string;
-  color: string;
-  completed: boolean;
-}
+import { Task } from "../../types";
+import TaskCard from "./components/TaskCard";
 
 // Fetch tasks using React Query
 async function fetchTasks(): Promise<Task[]> {
@@ -69,6 +64,10 @@ export default function HomePage() {
       alert("Failed to update task. Please try again.");
     },
   });
+
+  const handleToggle = (id: number, completed: boolean) => {
+    toggleTaskMutation.mutate({ id, completed });
+  };
 
   const total = tasks.length;
   const completedCount = tasks.filter((task) => task.completed).length;
@@ -138,45 +137,12 @@ export default function HomePage() {
         {tasks.length > 0 ? (
           <ul className="mt-8 w-full max-w-3xl space-y-4">
             {tasks.map((task) => (
-              <li
+              <TaskCard
                 key={task.id}
-                className={`flex items-center justify-between p-4 bg-gray-800 border rounded-lg ${
-                  task.completed ? "opacity-60" : ""
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  {/* Circular Checkbox */}
-                  <button
-                    onClick={() =>
-                      toggleTaskMutation.mutate({
-                        id: task.id,
-                        completed: task.completed,
-                      })
-                    }
-                    className={`h-6 w-6 flex items-center justify-center rounded-full border-2 ${
-                      task.completed
-                        ? "bg-purple-500 border-purple-500"
-                        : "bg-transparent border-primary"
-                    } transition-colors duration-200`}
-                  >
-                    {task.completed && (
-                      <span className="text-white font-bold text-xs">✓</span>
-                    )}
-                  </button>
-                  <Link href={`/edit/${task.id}`}>
-                    <span
-                      className={`text-sm ${
-                        task.completed ? "line-through text-gray-500" : ""
-                      }`}
-                    >
-                      {task.title}
-                    </span>
-                  </Link>
-                </div>
-                <button onClick={() => handleDelete(task.id)}>
-                  <TrashIcon className="h-5 w-5 text-gray-400 hover:text-red-600" />
-                </button>
-              </li>
+                task={task}
+                onToggle={handleToggle}
+                onDelete={handleDelete}
+              />
             ))}
           </ul>
         ) : (
