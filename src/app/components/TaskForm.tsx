@@ -8,13 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { TASK_COLORS } from "../../../constants";
-
-interface TaskFormProps {
-  initialTitle?: string;
-  initialColor?: string;
-  isEditing?: boolean;
-  onSubmit: (title: string, color: string) => void;
-}
+import { TaskFormProps } from "../../../types";
 
 const TaskForm: React.FC<TaskFormProps> = ({
   initialTitle = "",
@@ -37,7 +31,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
     onSubmit(title.trim(), selectedColor);
   };
 
-  console.log("color", selectedColor);
   return (
     <form
       onSubmit={handleSubmit}

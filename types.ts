@@ -10,3 +10,10 @@ export interface TaskCardProps {
   onToggle: (id: number, completed: boolean) => void;
   onDelete: (id: number) => void;
 }
+
+export interface TaskFormProps {
+  initialTitle?: string;
+  initialColor?: string;
+  isEditing?: boolean;
+  onSubmit: (title: string, color: string) => void;
+}
